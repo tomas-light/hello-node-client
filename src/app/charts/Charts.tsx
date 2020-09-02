@@ -2,7 +2,7 @@ import React from 'react';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import { IEntityPerMonth } from './models';
-import './Charts.css';
+import classes from './Charts.css';
 
 interface IChartsProps {
     studies: IEntityPerMonth[];
@@ -15,32 +15,38 @@ const Charts = (props: Props) => {
     const { studies, users } = props;
 
     return (
-        <>
-            <LineChart width={600} height={300} data={studies}>
-                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-                <CartesianGrid stroke="#ccc" />
-                <XAxis dataKey="name" />
-                <YAxis />
-            </LineChart>
-            <div>
-                {studies.map((entity) => (
-                    <p key={`study-${entity.name}`}>
-                        {entity.name}
-                    </p>
-                ))}
+        <div className={classes.container}>
+            <div className={classes.charts}>
+                <LineChart width={600} height={300} data={studies}>
+                    <Line type="monotone" dataKey={nameof<IEntityPerMonth>(o => o.startAt)} stroke="#8884d8"/>
+                    <CartesianGrid stroke="#ccc"/>
+                    <XAxis dataKey={nameof<IEntityPerMonth>(o => o.startAt)}/>
+                    <YAxis dataKey={nameof<IEntityPerMonth>(o => o.name)}/>
+                </LineChart>
             </div>
 
-            <div>
-                {users.map((entity) => (
-                    <p key={`user-${entity.name}`}>
-                        {entity.name}
-                    </p>
-                ))}
+            <div className={classes.list}>
+                <div>
+                    {studies.map((entity) => (
+                        <p key={`study-${entity.name}`}>
+                            <b>{entity.name}</b>
+                            <span>{entity.startAt.toLocaleDateString()}</span>
+                        </p>
+                    ))}
+                </div>
+
+                <div>
+                    {users.map((entity) => (
+                        <p key={`user-${entity.name}`}>
+                            <b>{entity.name}</b>
+                            <span>{entity.startAt.toLocaleDateString()}</span>
+                        </p>
+                    ))}
+                </div>
             </div>
-        </>
-    );
-    return (
-        <h1 className="title">hello</h1>
+
+            <img className={classes.task} src="/img/chart-tasks.png"/>
+        </div>
     );
 };
 

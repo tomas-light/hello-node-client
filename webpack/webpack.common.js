@@ -8,7 +8,6 @@ import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import { tsRule } from "./rules/ts-rule";
 import { imgRule } from "./rules/img-rule";
 import { fontRule } from "./rules/font-rule";
-import { cssRule } from "./rules/css-rule";
 
 const rootPath = path.join(__dirname, "..");
 
@@ -51,7 +50,6 @@ const commonWebpackConfig = merge(
     tsRule(),
     imgRule(),
     fontRule(),
-    cssRule(),
 );
 
 module.exports = commonWebpackConfig;

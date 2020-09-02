@@ -1,8 +1,12 @@
 import React from 'react';
+
 import { ChartsContainer } from './charts/Charts.container';
+import classes from './App.css';
 
 const App = () => (
-    <ChartsContainer/>
+    <div className={classes.page}>
+        <ChartsContainer/>
+    </div>
 );
 
 export { App };

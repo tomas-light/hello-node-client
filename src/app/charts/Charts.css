@@ -1,3 +1,22 @@
-.title {
-    color: red;
+.container {
+    display: grid;
+    grid-template-areas:
+        "charts . list . ."
+        ". . . . ."
+        "task task task task task"
+    ;
+    grid-template-columns: auto 100px auto 40px 1fr;
+    grid-template-rows: auto 200px auto;
+}
+
+.charts {
+    grid-area: charts;
+}
+
+.list {
+    grid-area: list;
+}
+
+.task {
+    grid-area: task;
 }
