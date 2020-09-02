@@ -17,6 +17,9 @@
         "watch": false,
 
         "baseUrl": "./src/",
+        "paths": {
+            "@utils/*": ["utils/*"]
+        },
         "plugins": [{ "name": "typescript-tslint-plugin" }]
     },
     "include": ["**/*.tsx", "**/*.ts"],

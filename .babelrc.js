@@ -13,8 +13,19 @@ const presets = [
     "@babel/preset-typescript",
 ];
 
+const alias = {
+    "@utils": "./src/utils",
+};
+
 const plugins = [
     "@babel/plugin-syntax-dynamic-import",
+    [
+        "babel-plugin-module-resolver",
+        {
+            root: [ "./src/" ],
+            alias,
+        },
+    ],
 ];
 
 /** @type {import("@babel/core").TransformOptions} */

@@ -37,7 +37,7 @@
         "space-within-parens": false,
 
         "align": [true, "parameters", "statements"],
-        "arrow-parens": true,
+        "arrow-parens": false,
         "eofline": true,
         "import-spacing": true,
         "indent": [true, "spaces", 4],
