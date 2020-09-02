@@ -12,29 +12,31 @@ function make(name: string, year: number, month: number, day: number): INewStudi
 }
 
 const SummaryChartContainer = () => {
-    const studies: INewStudiesDto[] = [
-        make('study 1', 2019, 2, 1),
-        make('study 2', 2019, 2, 1),
-        make('study 3', 2019, 3, 1),
-        make('study 4', 2019, 3, 1),
-        make('study 5', 2019, 2, 1),
-        make('study 6', 2019, 4, 1),
-        make('study 7', 2019, 4, 1),
-        make('study 8', 2019, 4, 1),
-        make('study 9', 2019, 4, 1),
-    ];
+    const summaryChartData = useMemo(() => {
+        const studies: INewStudiesDto[] = [
+            make('study 1', 2019, 2, 1),
+            make('study 2', 2019, 2, 1),
+            make('study 3', 2019, 3, 1),
+            make('study 4', 2019, 3, 1),
+            make('study 5', 2019, 2, 1),
+            make('study 6', 2019, 4, 1),
+            make('study 7', 2019, 4, 1),
+            make('study 8', 2019, 4, 1),
+            make('study 9', 2019, 4, 1),
+        ];
 
-    const users: INewStudiesDto[] = [
-        make('User 1', 2019, 1, 1),
-        make('User 2', 2019, 1, 1),
-        make('User 3', 2019, 2, 1),
-        make('User 4', 2019, 2, 1),
-    ];
+        const users: INewStudiesDto[] = [
+            make('User 1', 2019, 1, 1),
+            make('User 2', 2019, 1, 1),
+            make('User 3', 2019, 2, 1),
+            make('User 4', 2019, 2, 1),
+        ];
 
-    const summaryChartData = useMemo(() => aggregateDataForChart({
-        studies,
-        users,
-    }), [studies, users]);
+        return aggregateDataForChart({
+            studies,
+            users,
+        });
+    }, []);
 
     return (
         <SummaryChart

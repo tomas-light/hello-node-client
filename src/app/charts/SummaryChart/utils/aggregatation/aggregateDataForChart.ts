@@ -7,6 +7,7 @@ function aggregateDataForChart(data: IAggregatedData<INewStudiesDto>): ISummaryC
     if (keys.length === 0) {
         return [];
     }
+
     if (keys.length === 1) {
         const key = keys[0];
         const chartPoint = aggregateOneLine(data[key]);
@@ -16,6 +17,7 @@ function aggregateDataForChart(data: IAggregatedData<INewStudiesDto>): ISummaryC
         }));
         return chartData;
     }
+
     return aggregateMultipleLine(data);
 }
 
