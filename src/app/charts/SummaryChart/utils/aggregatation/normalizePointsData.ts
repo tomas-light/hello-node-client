@@ -1,5 +1,5 @@
 import { calcMonthDifference } from '@utils/date-time/calcMonthDifference';
-import { MONTH_INDEXES, MONTHS_IN_YEAR } from '@utils/date-time/constants';
+import { MONTH_INDEXES } from '@utils/date-time/constants';
 import { getMonthByName, getMonthName } from '@utils/date-time/getMonthName';
 import { ISummaryChartPoint } from '../../models';
 
@@ -66,7 +66,6 @@ function normalizeStartPoints(leftLine: ISummaryChartPoint[], rightLine: ISummar
         });
     }
 }
-
 
 function normalizeEndPoints(leftLine: ISummaryChartPoint[], rightLine: ISummaryChartPoint[]) {
     const leftEndPoint = leftLine[leftLine.length - 1];

@@ -1,8 +1,4 @@
-import {
-    IAggregated,
-    INewStudiesDto,
-    ISummaryChartData,
-} from '../../models';
+import { IAggregated, INewStudiesDto, ISummaryChartData, } from '../../models';
 import { aggregateMultipleLine } from './aggregateMultipleLine';
 
 function make(name: string, year: number, month: number, day: number): INewStudiesDto {

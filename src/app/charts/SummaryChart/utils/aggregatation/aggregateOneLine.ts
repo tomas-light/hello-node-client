@@ -6,25 +6,6 @@ import { compareModelsByDate } from '../compareModelsByDate';
 import { groupModelsByMonth } from '../groupModelsByMonth';
 import { calcYearAndMonth } from './calcYearAndMonth';
 
-// function aggregateOneLine(models: INewStudiesDto[]): ISummaryChartPoint[] {
-//     const sortedModels = models.sort(compareModelsByDate);
-//     const groupedDataByMonth = groupModelsByMonth(sortedModels);
-//
-//     const summaryChartPoints: ISummaryChartPoint[] = [];
-//     let summaryAmount = 0;
-//
-//     for (const [ monthName, entityNames ] of groupedDataByMonth.entries()) {
-//         summaryAmount += entityNames.length;
-//         const chartPoint: ISummaryChartPoint = {
-//             monthName,
-//             entityAmount: summaryAmount,
-//             newEntityNames: entityNames,
-//         };
-//         summaryChartPoints.push(chartPoint);
-//     }
-//
-//     return summaryChartPoints;
-// }
 function aggregateOneLine(models: INewStudiesDto[]): ISummaryChartPoint[] {
     const sorted = models.sort(compareModelsByDate);
     const groupedData = groupModelsByMonth(sorted);

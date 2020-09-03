@@ -59,7 +59,12 @@ test('9 entities, 3 month', () => {
     const output: ISummaryChartPoint[] = [
         { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 5' ] },
         { year: 2019, monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 3', 'study 4' ] },
-        { year: 2019, monthName: 'Apr', entityAmount: 9, newEntityNames: [ 'study 6', 'study 7', 'study 8', 'study 9' ] },
+        {
+            year: 2019,
+            monthName: 'Apr',
+            entityAmount: 9,
+            newEntityNames: [ 'study 6', 'study 7', 'study 8', 'study 9' ]
+        },
     ];
 
     const result = aggregateOneLine(input);

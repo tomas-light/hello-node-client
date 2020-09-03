@@ -1,21 +1,5 @@
-import { getMonthNameFromDate } from '@utils/date-time/getMonthName';
 import { INewStudiesDto } from '../models';
 import { IGroupedByMonth } from '../models/IGroupedByMonth';
-
-// function groupModelsByMonth(models: INewStudiesDto[]): Map<string, string[]> {
-//     const groupedDataByMonth = models.reduce((map, item: INewStudiesDto) => {
-//         const monthName = getMonthNameFromDate(item.startAt, 3);
-//         if (map.has(monthName)) {
-//             map.get(monthName).push(item.name);
-//         }
-//         else {
-//             map.set(monthName, [ item.name ]);
-//         }
-//         return map;
-//     }, new Map());
-//
-//     return groupedDataByMonth;
-// }
 
 function groupModelsByMonth(models: INewStudiesDto[]): IGroupedByMonth<INewStudiesDto>[] {
     const groupedDataByMonth = models.reduce((map, item: INewStudiesDto) => {
