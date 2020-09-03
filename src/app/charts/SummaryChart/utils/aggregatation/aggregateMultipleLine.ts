@@ -1,8 +1,8 @@
-import { IAggregatedData, INewStudiesDto, ISummaryChartData, ISummaryChartPoint } from '../../models';
+import { IAggregated, INewStudiesDto, ISummaryChartData, ISummaryChartPoint } from '../../models';
 import { aggregateOneLine } from './aggregateOneLine';
 import { normalizePointsData } from './normalizePointsData';
 
-function aggregateMultipleLine(data: IAggregatedData<INewStudiesDto>): ISummaryChartData[] {
+function aggregateMultipleLine(data: IAggregated<INewStudiesDto>): ISummaryChartData[] {
     const keys = Object.keys(data);
 
     const chartPoints: ISummaryChartPoint[][] = [];

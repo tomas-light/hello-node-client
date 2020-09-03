@@ -1,161 +1,310 @@
 import { ISummaryChartPoint, } from '../../models';
 import { normalizePointsData } from './normalizePointsData';
 
-describe('normalize data', () => {
-    test('level 1', () => {
-        const input: ISummaryChartPoint[][] = [
-            [
-                { monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
-            ],
-            [
-                { monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
-                { monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
-            ],
-        ];
+test('current line -> start', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+        ],
+    ];
 
-        const output: ISummaryChartPoint[][] = [
-            [
-                { monthName: 'Jan', entityAmount: 0, newEntityNames: [] },
-                { monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
-            ],
-            [
-                { monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
-                { monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
-            ],
-        ];
+    const output: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+        ],
+    ];
 
-        expect(normalizePointsData(input)).toStrictEqual(output);
-    });
+    expect(normalizePointsData(input)).toStrictEqual(output);
+});
 
-    test('level 2', () => {
-        const input: ISummaryChartPoint[][] = [
-            [
-                { monthName: 'Jan', entityAmount: 3, newEntityNames: [ 'study 1' ] },
-                { monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 2', 'study 3' ] },
-            ],
-            [
-                { monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
-            ],
-        ];
+test('current line -> start (different year)', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2018, monthName: 'Nov', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2018, monthName: 'Dec', entityAmount: 2, newEntityNames: [] },
+            { year: 2019, monthName: 'Jan', entityAmount: 2, newEntityNames: [] },
+            { year: 2019, monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+        ],
+    ];
 
-        const output: ISummaryChartPoint[][] = [
-            [
-                { monthName: 'Jan', entityAmount: 3, newEntityNames: [ 'study 1' ] },
-                { monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 2', 'study 3' ] },
-            ],
-            [
-                { monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
-                { monthName: 'Feb', entityAmount: 2, newEntityNames: [] },
-            ],
-        ];
+    const output: ISummaryChartPoint[][] = [
+        [
+            { year: 2018, monthName: 'Nov', entityAmount: 0, newEntityNames: [] },
+            { year: 2018, monthName: 'Dec', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Jan', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2018, monthName: 'Nov', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2018, monthName: 'Dec', entityAmount: 2, newEntityNames: [] },
+            { year: 2019, monthName: 'Jan', entityAmount: 2, newEntityNames: [] },
+            { year: 2019, monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+        ],
+    ];
 
-        expect(normalizePointsData(input)).toStrictEqual(output);
-    });
+    expect(normalizePointsData(input)).toStrictEqual(output);
+});
 
-    test('level 3', () => {
-        const input: ISummaryChartPoint[][] = [
-            [
-                { monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 5' ] },
-                { monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 3', 'study 4' ] },
-                { monthName: 'Apr', entityAmount: 6, newEntityNames: [ 'study 6' ] },
-                { monthName: 'May', entityAmount: 9, newEntityNames: [ 'study 7', 'study 8', 'study 9' ] },
-            ],
-            [
-                { monthName: 'Feb', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
-                { monthName: 'Apr', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
-            ],
-        ];
+test('current line -> end', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+        ],
+    ];
 
-        const output: ISummaryChartPoint[][] = [
-            [
-                { monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 5' ] },
-                { monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 3', 'study 4' ] },
-                { monthName: 'Apr', entityAmount: 6, newEntityNames: [ 'study 6' ] },
-                { monthName: 'May', entityAmount: 9, newEntityNames: [ 'study 7', 'study 8', 'study 9' ] },
-            ],
-            [
-                { monthName: 'Feb', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
-                { monthName: 'Mar', entityAmount: 2, newEntityNames: [] },
-                { monthName: 'Apr', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
-                { monthName: 'May', entityAmount: 4, newEntityNames: [] },
-            ],
-        ];
+    const output: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [] },
+        ],
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+        ],
+    ];
 
-        expect(normalizePointsData(input)).toStrictEqual(output);
-    });
+    expect(normalizePointsData(input)).toStrictEqual(output);
+});
 
-    test('level 4', () => {
-        const input: ISummaryChartPoint[][] = [
-            [
-                { monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 5' ] },
-                { monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 3', 'study 4' ] },
-                {
-                    monthName: 'Apr',
-                    entityAmount: 9,
-                    newEntityNames: [ 'study 6', 'study 7', 'study 8', 'study 9' ],
-                },
-            ],
-            [
-                { monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
-                { monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
-                { monthName: 'May', entityAmount: 5, newEntityNames: [ 'user 5' ] },
-            ],
-        ];
+test('current line -> end (different year)', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Dec', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Dec', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2020, monthName: 'Jan', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+        ],
+    ];
 
-        const output: ISummaryChartPoint[][] = [
-            [
-                { monthName: 'Jan', entityAmount: 0, newEntityNames: [] },
-                { monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 5' ] },
-                { monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 3', 'study 4' ] },
-                {
-                    monthName: 'Apr',
-                    entityAmount: 9,
-                    newEntityNames: [ 'study 6', 'study 7', 'study 8', 'study 9' ],
-                },
-                { monthName: 'May', entityAmount: 9, newEntityNames: [] },
-            ],
-            [
-                { monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
-                { monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
-                { monthName: 'Mar', entityAmount: 4, newEntityNames: [] },
-                { monthName: 'Apr', entityAmount: 4, newEntityNames: [] },
-                { monthName: 'May', entityAmount: 5, newEntityNames: [ 'user 5' ] },
-            ],
-        ];
+    const output: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Dec', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+            { year: 2020, monthName: 'Jan', entityAmount: 3, newEntityNames: [] },
+        ],
+        [
+            { year: 2019, monthName: 'Dec', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2020, monthName: 'Jan', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+        ],
+    ];
 
-        expect(normalizePointsData(input)).toStrictEqual(output);
-    });
+    expect(normalizePointsData(input)).toStrictEqual(output);
+});
 
-    test('level 5', () => {
-        const input: ISummaryChartPoint[][] = [
-            [
-                { monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 5' ] },
-                { monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 3', 'study 4' ] },
-            ],
-            [
-                { monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
-                { monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
-                { monthName: 'May', entityAmount: 5, newEntityNames: [ 'user 5' ] },
-            ],
-        ];
+test('other line -> start', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 1, newEntityNames: [ 'study 1' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+        ],
+    ];
 
-        const output: ISummaryChartPoint[][] = [
-            [
-                { monthName: 'Jan', entityAmount: 0, newEntityNames: [] },
-                { monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 5' ] },
-                { monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 3', 'study 4' ] },
-                { monthName: 'Apr', entityAmount: 5, newEntityNames: [] },
-                { monthName: 'May', entityAmount: 9, newEntityNames: [] },
-            ],
-            [
-                { monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
-                { monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
-                { monthName: 'Mar', entityAmount: 4, newEntityNames: [] },
-                { monthName: 'Apr', entityAmount: 4, newEntityNames: [] },
-                { monthName: 'May', entityAmount: 5, newEntityNames: [ 'user 5' ] },
-            ],
-        ];
+    const output: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 1, newEntityNames: [ 'study 1' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Feb', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+        ],
+    ];
 
-        expect(normalizePointsData(input)).toStrictEqual(output);
-    });
+    expect(normalizePointsData(input)).toStrictEqual(output);
+});
+
+test('other line -> start (different year)', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2018, monthName: 'Nov', entityAmount: 3, newEntityNames: [ 'study 1' ] },
+            { year: 2018, monthName: 'Dec', entityAmount: 3, newEntityNames: [] },
+            { year: 2019, monthName: 'Jan', entityAmount: 3, newEntityNames: [] },
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+        ],
+    ];
+
+    const output: ISummaryChartPoint[][] = [
+        [
+            { year: 2018, monthName: 'Nov', entityAmount: 3, newEntityNames: [ 'study 1' ] },
+            { year: 2018, monthName: 'Dec', entityAmount: 3, newEntityNames: [] },
+            { year: 2019, monthName: 'Jan', entityAmount: 3, newEntityNames: [] },
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2018, monthName: 'Nov', entityAmount: 0, newEntityNames: [] },
+            { year: 2018, monthName: 'Dec', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Jan', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Feb', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+        ],
+    ];
+
+    expect(normalizePointsData(input)).toStrictEqual(output);
+});
+
+test('other line -> end', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 3, newEntityNames: [ 'study 1' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+        ],
+    ];
+
+    const output: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 3, newEntityNames: [ 'study 1' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 2, newEntityNames: [] },
+        ],
+    ];
+
+    expect(normalizePointsData(input)).toStrictEqual(output);
+});
+
+test('other line -> end (different year)', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Dec', entityAmount: 3, newEntityNames: [ 'study 1' ] },
+            { year: 2020, monthName: 'Jan', entityAmount: 3, newEntityNames: [ 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Dec', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+        ],
+    ];
+
+    const output: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Dec', entityAmount: 3, newEntityNames: [ 'study 1' ] },
+            { year: 2020, monthName: 'Jan', entityAmount: 3, newEntityNames: [ 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Dec', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2020, monthName: 'Jan', entityAmount: 2, newEntityNames: [] },
+        ],
+    ];
+
+    expect(normalizePointsData(input)).toStrictEqual(output);
+});
+
+test('current line -> end; other line -> start', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+            { year: 2019, monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 4', 'study 5' ] },
+            { year: 2019, monthName: 'Apr', entityAmount: 8, newEntityNames: [ 'study 6', 'study 7', 'study 8' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Sep', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Oct', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+            { year: 2019, monthName: 'Nov', entityAmount: 5, newEntityNames: [ 'user 5' ] },
+        ],
+    ];
+
+    const output: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+            { year: 2019, monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 4', 'study 5' ] },
+            {
+                year: 2019, monthName: 'Apr',
+                entityAmount: 8,
+                newEntityNames: [ 'study 6', 'study 7', 'study 8' ],
+            },
+            { year: 2019, monthName: 'May', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Jun', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Jul', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Aug', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Sep', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Oct', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Nov', entityAmount: 8, newEntityNames: [] },
+        ],
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Mar', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Apr', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'May', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Jun', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Jul', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Aug', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Sep', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Oct', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+            { year: 2019, monthName: 'Nov', entityAmount: 5, newEntityNames: [ 'user 5' ] },
+        ],
+    ];
+
+    expect(normalizePointsData(input)).toStrictEqual(output);
+});
+
+test('current line -> start; other line -> end', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Sep', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Oct', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+            { year: 2019, monthName: 'Nov', entityAmount: 5, newEntityNames: [ 'user 5' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+            { year: 2019, monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 4', 'study 5' ] },
+            { year: 2019, monthName: 'Apr', entityAmount: 8, newEntityNames: [ 'study 6', 'study 7', 'study 8' ] },
+        ],
+    ];
+
+    const output: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Mar', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Apr', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'May', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Jun', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Jul', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Aug', entityAmount: 0, newEntityNames: [] },
+            { year: 2019, monthName: 'Sep', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Oct', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+            { year: 2019, monthName: 'Nov', entityAmount: 5, newEntityNames: [ 'user 5' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+            { year: 2019, monthName: 'Mar', entityAmount: 5, newEntityNames: [ 'study 4', 'study 5' ] },
+            {
+                year: 2019, monthName: 'Apr',
+                entityAmount: 8,
+                newEntityNames: [ 'study 6', 'study 7', 'study 8' ],
+            },
+            { year: 2019, monthName: 'May', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Jun', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Jul', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Aug', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Sep', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Oct', entityAmount: 8, newEntityNames: [] },
+            { year: 2019, monthName: 'Nov', entityAmount: 8, newEntityNames: [] },
+        ],
+    ];
+
+    expect(normalizePointsData(input)).toStrictEqual(output);
 });

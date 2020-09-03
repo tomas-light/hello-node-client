@@ -1,7 +1,10 @@
 import { MONTH_NAMES } from './constants';
 
-function getMonthName(date: Date, charCount?: number) {
-    const month = date.getMonth();
+function getMonthNameFromDate(date: Date, charCount?: number) {
+    return getMonthName(date.getMonth(), charCount);
+}
+
+function getMonthName(month: number, charCount?: number) {
     let monthName = MONTH_NAMES[month];
     if (charCount) {
         monthName = monthName.substr(0, charCount);
@@ -20,4 +23,4 @@ function getMonthByName(monthName: string): number {
     return month;
 }
 
-export { getMonthName, getMonthByName };
+export { getMonthNameFromDate, getMonthName, getMonthByName };
