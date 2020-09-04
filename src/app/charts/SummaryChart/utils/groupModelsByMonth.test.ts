@@ -1,55 +1,34 @@
+import { MONTH_INDEXES } from '@utils/date-time/constants';
 import { INewStudiesDto } from '../models';
 import { IGroupedByMonth } from '../models/IGroupedByMonth';
 import { groupModelsByMonth } from './groupModelsByMonth';
-
-function make(name: string, year: number, month: number, day: number): INewStudiesDto {
-    return {
-        name,
-        startAt: date(year, month, day),
-    };
-}
-
-function date(year: number, month: number, day: number) {
-    return new Date(Date.UTC(year, month, day));
-}
+import { group, make } from './test-utils';
 
 test('group data', () => {
     const input: INewStudiesDto[] = [
-        make('study 1', 2019, 10, 1),
-        make('study 2', 2019, 10, 10),
-        make('study 3', 2019, 10, 20),
-        make('study 4', 2019, 11, 1),
-        make('study 5', 2019, 11, 10),
-        make('study 6', 2020, 0, 1),
-        make('study 7', 2020, 1, 1),
-        make('study 8', 2020, 1, 10),
+        make('study 1', 2019, MONTH_INDEXES.November),
+        make('study 2', 2019, MONTH_INDEXES.November),
+        make('study 3', 2019, MONTH_INDEXES.November),
+        make('study 4', 2019, MONTH_INDEXES.December),
+        make('study 5', 2019, MONTH_INDEXES.December),
+        make('study 6', 2020, MONTH_INDEXES.January),
+        make('study 7', 2020, MONTH_INDEXES.February),
+        make('study 8', 2020, MONTH_INDEXES.February),
     ];
 
     const output: IGroupedByMonth<INewStudiesDto>[] = [
-        {
-            year: 2019, month: 10, entities: [
-                { name: 'study 1', startAt: date(2019, 10, 1) },
-                { name: 'study 2', startAt: date(2019, 10, 10) },
-                { name: 'study 3', startAt: date(2019, 10, 20) },
-            ],
-        },
-        {
-            year: 2019, month: 11, entities: [
-                { name: 'study 4', startAt: date(2019, 11, 1) },
-                { name: 'study 5', startAt: date(2019, 11, 10) },
-            ],
-        },
-        {
-            year: 2020, month: 0, entities: [
-                { name: 'study 6', startAt: date(2020, 0, 1) },
-            ],
-        },
-        {
-            year: 2020, month: 1, entities: [
-                { name: 'study 7', startAt: date(2020, 1, 1) },
-                { name: 'study 8', startAt: date(2020, 1, 10) },
-            ],
-        },
+        group(2019, MONTH_INDEXES.November, [
+            'study 1', 'study 2', 'study 3',
+        ]),
+        group(2019, MONTH_INDEXES.December, [
+            'study 4', 'study 5',
+        ]),
+        group(2020, MONTH_INDEXES.January, [
+            'study 6',
+        ]),
+        group(2020, MONTH_INDEXES.February, [
+            'study 7', 'study 8',
+        ]),
     ];
 
     const result = groupModelsByMonth(input);

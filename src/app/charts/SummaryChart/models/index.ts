@@ -1,4 +1,4 @@
 export * from './IAggregated';
 export * from './INewStudiesDto';
-export * from './ISummaryChartData';
-export * from './ISummaryChartPoint';
+export * from './chart/summary/ISummaryChartData';
+export * from './chart/summary/ISummaryChartPoint';

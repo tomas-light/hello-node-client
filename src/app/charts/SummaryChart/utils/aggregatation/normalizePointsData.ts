@@ -1,9 +1,13 @@
 import { calcMonthDifference } from '@utils/date-time/calcMonthDifference';
 import { MONTH_INDEXES } from '@utils/date-time/constants';
 import { getMonthByName, getMonthName } from '@utils/date-time/getMonthName';
-import { ISummaryChartPoint } from '../../models';
+import { IMonthChartPoint } from '../../models/chart/IMonthChartPoint';
+import { ILineNormalizationOptions } from '../../models/chart/options/normalization';
 
-function normalizePointsData(chartPoints: ISummaryChartPoint[][]): ISummaryChartPoint[][] {
+function normalizePointsData<TPoint extends IMonthChartPoint>(
+    chartPoints: TPoint[][],
+    options: ILineNormalizationOptions<TPoint>
+): TPoint[][] {
     if (!chartPoints || !Array.isArray(chartPoints) || !chartPoints.length) {
         return [];
     }
@@ -82,15 +86,19 @@ function normalizePointsData(chartPoints: ISummaryChartPoint[][]): ISummaryChart
     for (let attempt = 0; attempt < 2; attempt++) {
         for (let lineIndex = 1; lineIndex < normalizedPoints.length; lineIndex++) {
             const rightLine = normalizedPoints[lineIndex];
-            normalizeStartPoints(firstLine, rightLine);
-            normalizeEndPoints(firstLine, rightLine);
+            normalizeStartPoints<TPoint>(firstLine, rightLine, options);
+            normalizeEndPoints<TPoint>(firstLine, rightLine, options);
         }
     }
 
     return normalizedPoints;
 }
 
-function normalizeStartPoints(leftLine: ISummaryChartPoint[], rightLine: ISummaryChartPoint[]) {
+function normalizeStartPoints<TPoint extends IMonthChartPoint>(
+    leftLine: TPoint[],
+    rightLine: TPoint[],
+    options: ILineNormalizationOptions<TPoint>
+) {
     const leftFirstPoint = leftLine[0];
     const rightFirstPoint = rightLine[0];
 
@@ -110,7 +118,7 @@ function normalizeStartPoints(leftLine: ISummaryChartPoint[], rightLine: ISummar
 
     let month: number = leftMonth;
     let year: number = leftFirstPoint.year;
-    let line: ISummaryChartPoint[] = rightLine;
+    let line: TPoint[] = rightLine;
 
     if (diff < 0) {
         month = rightMonth;
@@ -125,17 +133,19 @@ function normalizeStartPoints(leftLine: ISummaryChartPoint[], rightLine: ISummar
         }
 
         const monthName = getMonthName(month, 3);
-
-        line.splice(i, 0, {
+        const point = options.getStartPoint({
             year,
             monthName,
-            newEntityNames: [],
-            entityAmount: 0,
-        });
+        } as TPoint);
+        line.splice(i, 0, point);
     }
 }
 
-function normalizeEndPoints(leftLine: ISummaryChartPoint[], rightLine: ISummaryChartPoint[]) {
+function normalizeEndPoints<TPoint extends IMonthChartPoint>(
+    leftLine: TPoint[],
+    rightLine: TPoint[],
+    options: ILineNormalizationOptions<TPoint>
+) {
     const leftEndPoint = leftLine[leftLine.length - 1];
     const rightEndPoint = rightLine[rightLine.length - 1];
 
@@ -155,7 +165,7 @@ function normalizeEndPoints(leftLine: ISummaryChartPoint[], rightLine: ISummaryC
 
     let month: number = leftMonth + 1;
     let year: number = leftEndPoint.year;
-    let line: ISummaryChartPoint[] = leftLine;
+    let line: TPoint[] = leftLine;
 
     if (diff > 0) {
         month = rightMonth + 1;
@@ -163,7 +173,7 @@ function normalizeEndPoints(leftLine: ISummaryChartPoint[], rightLine: ISummaryC
         line = rightLine;
     }
 
-    const entityAmount: number = line[line.length - 1].entityAmount;
+    const lastEndPoint = line[line.length - 1];
 
     for (let i = 0; i < Math.abs(diff); i++, month++) {
         if (month > MONTH_INDEXES.December) {
@@ -172,13 +182,11 @@ function normalizeEndPoints(leftLine: ISummaryChartPoint[], rightLine: ISummaryC
         }
 
         const monthName = getMonthName(month, 3);
-
-        line.push({
+        const point = options.getEndPoint(lastEndPoint, {
             year,
             monthName,
-            newEntityNames: [],
-            entityAmount,
-        });
+        } as TPoint);
+        line.push(point);
     }
 }
 

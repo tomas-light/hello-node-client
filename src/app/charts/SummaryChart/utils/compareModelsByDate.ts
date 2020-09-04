@@ -1,8 +1,8 @@
 import { INewStudiesDto } from '../models';
 
 function compareModelsByDate(left: INewStudiesDto, right: INewStudiesDto) {
-    const leftMilliseconds = left.startAt.getMilliseconds();
-    const rightMilliseconds = right.startAt.getMilliseconds();
+    const leftMilliseconds = left.date.getMilliseconds();
+    const rightMilliseconds = right.date.getMilliseconds();
     if (leftMilliseconds > rightMilliseconds) {
         return -1;
     }

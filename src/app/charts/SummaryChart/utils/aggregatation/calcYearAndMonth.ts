@@ -1,9 +1,8 @@
 import { MONTH_INDEXES, MONTHS_IN_YEAR } from '@utils/date-time/constants';
-import { INewStudiesDto } from '../../models';
 import { IGroupedByMonth } from '../../models/IGroupedByMonth';
 
-function calcYearAndMonth(
-    grouped: IGroupedByMonth<INewStudiesDto>,
+function calcYearAndMonth<TEntity = any>(
+    grouped: IGroupedByMonth<TEntity>,
     currentMonthDiff: number
 ): [ number, number ] {
     let month = grouped.month + 1;
@@ -18,7 +17,7 @@ function calcYearAndMonth(
         return [ previousYear, getMonthIndex(monthInPreviousYear) ];
     }
 
-    const yearsDiff = Math.trunc(currentMonthDiff / MONTHS_IN_YEAR);
+    const yearsDiff = (currentMonthDiff / MONTHS_IN_YEAR) >> 0;
     let year = grouped.year - yearsDiff;
     month = grouped.month - (currentMonthDiff - MONTHS_IN_YEAR * yearsDiff);
 

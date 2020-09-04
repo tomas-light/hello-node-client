@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { LegendPayload, LegendProps } from 'recharts';
 
 import classes from './SummaryChartLegend.css';
@@ -18,11 +18,15 @@ const SummaryChartLegend = (props: Props) => {
     const { payload } = props;
 
     return (
-        <div>
+        <div className={classes.container}>
             {payload.map((item: RealLegendPayload) => (
-                <p key={`legend-${item.dataKey}`}>
-                    {item.value}
-                </p>
+                <div key={`legend-item-${item.value}`} className={classes['legend-item']}>
+                    <div className={classes['color-square']} style={{ backgroundColor: item.color }}/>
+
+                    <p className={classes.label}>
+                        {item.value}
+                    </p>
+                </div>
             ))}
         </div>
     );

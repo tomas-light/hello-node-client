@@ -1,41 +1,48 @@
 import { calcMonthDifference } from '@utils/date-time/calcMonthDifference';
-import { getMonthName } from '@utils/date-time/getMonthName';
-import { INewStudiesDto, ISummaryChartPoint } from '../../models';
+import { IChartOptions } from '../../models/chart/IChartOptions';
 import { IGroupedByMonth } from '../../models/IGroupedByMonth';
-import { compareModelsByDate } from '../compareModelsByDate';
-import { groupModelsByMonth } from '../groupModelsByMonth';
 import { calcYearAndMonth } from './calcYearAndMonth';
 
-function aggregateOneLine(models: INewStudiesDto[]): ISummaryChartPoint[] {
-    const sorted = models.sort(compareModelsByDate);
-    const groupedData = groupModelsByMonth(sorted);
+function aggregateOneLine<TEntity, TPoint, TChartData, TPayload>(
+    models: TEntity[],
+    options: IChartOptions<TEntity, TPoint, TChartData, TPayload>
+): TPoint[] {
+    const sorted = models.sort(options.sort);
+    const groupedData = options.group(sorted);
 
-    const summaryChartPoints = aggregateGroupedData(groupedData);
+    const summaryChartPoints = aggregateGroupedData<TEntity, TPoint, TChartData, TPayload>(groupedData, options);
     return summaryChartPoints;
 }
 
-export function aggregateGroupedData(groupedData: IGroupedByMonth<INewStudiesDto>[]) {
-    let summaryAmount = 0;
-    const summaryChartPoints: ISummaryChartPoint[] = [];
+export function aggregateGroupedData<TEntity, TPoint, TChartData, TPayload>(
+    groupedData: IGroupedByMonth<TEntity>[],
+    options: IChartOptions<TEntity, TPoint, TChartData, TPayload>
+): TPoint[] {
+    let accumulator = options.initAccumulator;
+    const points: TPoint[] = [];
 
     groupedData.forEach((grouped, index) => {
         if (index > 0) {
             const previousGrouped = groupedData[index - 1];
-            fillEmptyIntervals(summaryChartPoints, grouped, previousGrouped, summaryAmount);
+            fillEmptyIntervals(points, grouped, previousGrouped, options, accumulator);
         }
 
-        summaryAmount = summaryAmount + grouped.entities.length;
-        addChartPoint(summaryChartPoints, grouped, summaryAmount);
+        accumulator = options.addChartPoint(
+            points,
+            grouped,
+            accumulator
+        );
     });
 
-    return summaryChartPoints;
+    return points;
 }
 
-function fillEmptyIntervals(
-    summaryChartPoints: ISummaryChartPoint[],
-    grouped: IGroupedByMonth<INewStudiesDto>,
-    previousGrouped: IGroupedByMonth<INewStudiesDto>,
-    summaryAmount: number
+function fillEmptyIntervals<TEntity, TPoint, TChartData, TPayload>(
+    points: TPoint[],
+    grouped: IGroupedByMonth<TEntity>,
+    previousGrouped: IGroupedByMonth<TEntity>,
+    options: IChartOptions<TEntity, TPoint, TChartData, TPayload>,
+    accumulator: number
 ): void {
     const diff = calcMonthDifference(
         previousGrouped.year,
@@ -52,34 +59,17 @@ function fillEmptyIntervals(
     }
 
     for (let currentMonthDiff = diff - 1; currentMonthDiff > 0; currentMonthDiff--) {
-        const [ year, month ] = calcYearAndMonth(grouped, currentMonthDiff);
-
-        addChartPoint(
-            summaryChartPoints,
+        const [ year, month ] = calcYearAndMonth<TEntity>(grouped, currentMonthDiff);
+        options.addChartPoint(
+            points,
             {
+                year,
                 month,
                 entities: [],
-                year,
             },
-            summaryAmount
+            accumulator
         );
     }
-}
-
-function addChartPoint(
-    summaryChartPoints: ISummaryChartPoint[],
-    grouped: IGroupedByMonth<INewStudiesDto>,
-    entityAmount: number
-): void {
-    const monthName = getMonthName(grouped.month, 3);
-    const newEntityNames = grouped.entities.map(entity => entity.name);
-
-    summaryChartPoints.push({
-        year: grouped.year,
-        monthName,
-        entityAmount,
-        newEntityNames,
-    });
 }
 
 export { aggregateOneLine };

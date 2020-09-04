@@ -1,4 +1,5 @@
-export interface INewStudiesDto {
+import { IHaveDate } from './IHaveDate';
+
+export interface INewStudiesDto extends IHaveDate {
     name: string;
-    startAt: Date;
 }

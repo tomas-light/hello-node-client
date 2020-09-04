@@ -8,7 +8,7 @@
     "css": "tcm src",
     "watch:js": "npm run dev:js -- --watch",
     "watch:css": "npm run css -- --watch",
-    "watch": "npm-run-all --parallel watch:js watch:css",
+    "watch": "npm-run-all --parallel watch:css watch:js",
     "prod": "npm run css && npm run prod:js",
     "test": "jest"
   },
@@ -33,6 +33,7 @@
     "@types/jest": "26.0.13",
     "@types/react": "16.9.41",
     "@types/react-dom": "16.9.8",
+    "@types/recharts": "^1.8.14",
     "@types/ts-nameof": "4.2.1",
     "babel-jest": "26.3.0",
     "babel-loader": "8.1.0",
