@@ -11,6 +11,74 @@ function normalizePointsData(chartPoints: ISummaryChartPoint[][]): ISummaryChart
     const normalizedPoints = [ ...chartPoints ];
     const firstLine = chartPoints[0];
 
+    /*
+     2 attempts because at first time you compare FIRST line with everyone
+     and at the end of loop it will contains entire period (and other lines will little correct with it)
+     in second attempt you normalize all OTHER lines with full period from FIRST line
+     for example, you have:
+         [
+            [ {'Mar', ...}, {'Apr', ...} ],
+            [ {'Jan', ...}, {'Feb', ...} ],
+            [ {'Jun', ...} ],
+         ]
+
+     after first attempt you will get:
+         [
+            [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...}, {'May', ...}, {'Jun', ...} ],
+            [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...} ],
+            [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...}, {'May', ...}, {'Jun', ...} ],
+         ]
+
+     as you can see SECOND line does not contain full period, next attempt will fill the empty period
+     */
+
+    /*
+    How it works? For example, you have:
+        [
+            [ {'Mar', ...}, {'Apr', ...} ],
+            [ {'Jan', ...}, {'Feb', ...} ],
+            [ {'Jun', ...} ],
+        ]
+
+    At first, we compare FIRST and SECOND lines. We get FIRST points of each line.
+        {'Mar', ...} and {'Jan', ...}
+
+    'Mar' is later than 'Jan', so we should to extends LEFT line's start from 'Jan' to 'Mar'.
+    And we will get follow lines:
+        [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...} ],
+        [ {'Jan', ...}, {'Feb', ...} ],
+
+    After that we compare LAST points of each line
+        {'Apr', ...} and {'Feb', ...}
+
+    'Apr' is later than 'Feb', so we should to extends RIGHT line's end from 'Feb' to 'Apr'.
+    And we will get follow lines:
+        [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...} ],
+        [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...} ],
+
+
+    In next iteration we compare FIRST and THIRD lines.
+        [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...} ],
+        and
+        [ {'Jun', ...} ],
+
+    We get FIRST points of each line.
+        {'Jan', ...} and {'Jun', ...}
+
+    'Jan' is earlier than 'Jun', so we should to extends RIGHT line's start from 'Jan' to 'Jun'.
+    And we will get follow lines:
+        [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...} ],
+        [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...}, {'May', ...}, {'Jun', ...} ],
+
+    After that we compare LAST points of each line
+        {'Apr', ...} and {'Jun', ...}
+
+    'Apr' is earlier than 'Jun', so we should to extends LEFT line's end from 'Apr' to 'Jun'.
+    And we will get follow lines:
+        [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...}, {'May', ...}, {'Jun', ...} ],
+        [ {'Jan', ...}, {'Feb', ...}, {'Mar', ...}, {'Apr', ...}, {'May', ...}, {'Jun', ...} ],
+    */
+
     for (let attempt = 0; attempt < 2; attempt++) {
         for (let lineIndex = 1; lineIndex < chartPoints.length; lineIndex++) {
             const rightLine = chartPoints[lineIndex];
