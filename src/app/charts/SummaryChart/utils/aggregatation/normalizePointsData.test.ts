@@ -1,6 +1,31 @@
 import { ISummaryChartPoint, } from '../../models';
 import { normalizePointsData } from './normalizePointsData';
 
+test('dont\'t change original data', () => {
+    const input: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+        ],
+    ];
+
+    const inputForComparing: ISummaryChartPoint[][] = [
+        [
+            { year: 2019, monthName: 'Feb', entityAmount: 3, newEntityNames: [ 'study 1', 'study 2', 'study 3' ] },
+        ],
+        [
+            { year: 2019, monthName: 'Jan', entityAmount: 2, newEntityNames: [ 'user 1', 'user 2' ] },
+            { year: 2019, monthName: 'Feb', entityAmount: 4, newEntityNames: [ 'user 3', 'user 4' ] },
+        ],
+    ];
+
+    normalizePointsData(input);
+    expect(input).toStrictEqual(inputForComparing);
+});
+
 test('current line -> start', () => {
     const input: ISummaryChartPoint[][] = [
         [

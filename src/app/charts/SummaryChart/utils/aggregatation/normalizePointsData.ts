@@ -8,8 +8,8 @@ function normalizePointsData(chartPoints: ISummaryChartPoint[][]): ISummaryChart
         return [];
     }
 
-    const normalizedPoints = [ ...chartPoints ];
-    const firstLine = chartPoints[0];
+    const normalizedPoints = [ ...chartPoints.map(line => line.map(b => b)) ];
+    const firstLine = normalizedPoints[0];
 
     /*
      2 attempts because at first time you compare FIRST line with everyone
@@ -80,8 +80,8 @@ function normalizePointsData(chartPoints: ISummaryChartPoint[][]): ISummaryChart
     */
 
     for (let attempt = 0; attempt < 2; attempt++) {
-        for (let lineIndex = 1; lineIndex < chartPoints.length; lineIndex++) {
-            const rightLine = chartPoints[lineIndex];
+        for (let lineIndex = 1; lineIndex < normalizedPoints.length; lineIndex++) {
+            const rightLine = normalizedPoints[lineIndex];
             normalizeStartPoints(firstLine, rightLine);
             normalizeEndPoints(firstLine, rightLine);
         }
