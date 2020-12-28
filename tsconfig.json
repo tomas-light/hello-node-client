@@ -1,32 +1,30 @@
 {
-    "compileOnSave": false,
-    "compilerOptions": {
-        "allowJs": true,
-        "allowSyntheticDefaultImports": true,
-        "checkJs": true,
-        "esModuleInterop": true,
-        "experimentalDecorators": true,
-        "importHelpers": true,
-        "jsx": "react",
-        "module": "esnext",
-        "moduleResolution": "node",
-        "noErrorTruncation": true,
-        "skipLibCheck": true,
-        "sourceMap": true,
-        "target": "es6",
-        "watch": false,
+  "compileOnSave": false,
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noErrorTruncation": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "target": "es6",
+    "watch": false,
+    "noImplicitAny": false,
 
-        "baseUrl": "./src/",
-        "paths": {
-            "@utils/*": ["utils/*"]
-        },
-        "plugins": [{ "name": "typescript-tslint-plugin" }]
-    },
-    "include": ["**/*.tsx", "**/*.ts"],
-    "exclude": [
-        "node_modules",
-        "public",
-        "scripts",
-        "webpack"
-    ]
+    "baseUrl": "src",
+    "paths": {
+    }
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/**/*.test.ts?(x)"
+  ]
 }

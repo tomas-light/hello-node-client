@@ -3,25 +3,27 @@ const { compilerOptions } = require('./tsconfig');
 
 /** @type {import("@jest/types").Config.InitialOptions} */
 const config = {
-    preset: 'ts-jest',
-    testEnvironment: 'node',
+    globals: {
+        'ts-jest': {
+            astTransformers: {
+                before: [ 'ts-nameof' ],
+            },
+        },
+    },
     moduleNameMapper: pathsToModuleNameMapper(
         compilerOptions.paths,
         {
             prefix: '<rootDir>/src/'
         }
     ),
-    globals: {
-        'ts-jest': {
-            'astTransformers': [ 'ts-nameof' ]
-        }
-    },
-    transformIgnorePatterns: [
-        '<rootDir>/(node_modules)/'
-    ],
+    preset: 'ts-jest',
+    testEnvironment: 'node',
     testMatch: [
         '<rootDir>/**/*.test.ts',
         '<rootDir>/**/*.test.tsx',
+    ],
+    transformIgnorePatterns: [
+        '<rootDir>/(node_modules)/'
     ],
 };
 
