@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 function Users() {
   const [users, setUsers] = useState([]);
+
   useEffect(() => {
     (async function load() {
       const response = await fetch('api/users');
@@ -29,16 +30,4 @@ function Users() {
 }
 
 export { Users };
-
-
-import { UserPage } from '../../app2_GoodComponent/UserPage/UserPage';
-
-function fn() {
-  return (
-    <div>
-      <Users/>
-      <UserPage/>
-    </div>
-  );
-}
 
