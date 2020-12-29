@@ -1,5 +1,5 @@
 export function logicMiddleware(watchers) {
-  return (reduxStore) => (next) => action => {
+  return reduxStore => next => action => {
     next(action);
 
     if (watchers.has(action.type)) {
