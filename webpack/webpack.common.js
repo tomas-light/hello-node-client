@@ -10,33 +10,35 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { cssRule, jsRule, tsRule } from './rules';
 
 const rootPath = path.join(__dirname, '..');
-
 const publicPath = path.join(rootPath, 'public');
-const entryPointPath = path.join(rootPath, 'src', 'learnApps', 'index.js');
-
-const outputPath = path.join(publicPath, "js");
-const htmlTemplatePath = path.join(publicPath, 'templates', 'index.html');
 
 const commonWebpackConfig = merge(
   {
-    entry: entryPointPath,
+    entry: {
+      // learn: path.join(rootPath, 'src', 'learnApps', 'index.js'),
+      buttons: path.join(rootPath, 'src', 'buttons', 'index.jsx'),
+    },
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     },
     output: {
-      filename: "[name].bundle.[contenthash].js",
-      publicPath: "/js/",
-      path: outputPath,
+      filename: '[name].js',
+      publicPath: '/js/',
+      path: path.join(publicPath, 'js'),
     },
     plugins: [
       // increase build performance
       new ForkTsCheckerWebpackPlugin(),
-      new DefinePlugin({
-      }),
+      new DefinePlugin({}),
       new CleanWebpackPlugin(),
+      // new HtmlWebpackPlugin({
+      //   inject: 'body',
+      //   template: path.join(publicPath, 'templates', 'index.html'),
+      //   filename: path.join(publicPath, 'index.html'),
+      // }),
       new HtmlWebpackPlugin({
         inject: 'body',
-        template: htmlTemplatePath,
+        template: path.join(publicPath, 'templates', 'buttons.html'),
         filename: path.join(publicPath, 'index.html'),
       }),
       new ManifestPlugin(),
