@@ -1,8 +1,6 @@
 import React from 'react';
 import Miew from 'miew';
 
-const MiewButton = props => {
-  return Miew.VERSION;
-}
+const MiewButton = () => Miew.VERSION;
 
 export { MiewButton };

@@ -5,6 +5,8 @@ import HtmlWebPackPlugin from 'html-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 import { cssRule, jsRule, tsRule } from './rules';
+import { DefinePlugin } from 'webpack';
+import { getEnvConfig } from './getEnvConfig';
 
 const rootPath = path.join(__dirname, '..');
 const publicPath = path.resolve(rootPath, 'public');
@@ -33,6 +35,9 @@ const devWebpackConfig = merge(
     },
     plugins: [
       new ForkTsCheckerWebpackPlugin(),
+      new DefinePlugin({
+        'process.env': JSON.stringify(getEnvConfig()),
+      }),
       new CleanWebpackPlugin(),
       new HtmlWebPackPlugin({
         template: paths.htmlTemplate,

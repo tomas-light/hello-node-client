@@ -6,6 +6,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { getEnvConfig } from './getEnvConfig';
 
 import { cssRule, jsRule, tsRule } from './rules';
 
@@ -29,7 +30,9 @@ const commonWebpackConfig = merge(
     plugins: [
       // increase build performance
       new ForkTsCheckerWebpackPlugin(),
-      new DefinePlugin({}),
+      new DefinePlugin({
+        'process.env': JSON.stringify(getEnvConfig()),
+      }),
       new CleanWebpackPlugin(),
       // new HtmlWebpackPlugin({
       //   inject: 'body',

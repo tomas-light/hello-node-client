@@ -1,24 +1,19 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
+import { ReduxButton } from './HeavyComponents/redux';
 import { App } from './App';
-import ReduxButton from "./HeavyComponents/redux";
-
 
 const rootElement = document.getElementById('root');
 
 ReactDom.render(
   <App
     top={[
-      {
-        component: <ReduxButton/>,
-        onClick: event => console.log(event, 'top 2'),
-      },
+      [],
+      [{
+        Component: () => <ReduxButton />,
+      }],
     ]}
-    hide={{
-      // left: [0],
-      // top: [1],
-    }}
   />,
   rootElement
 );

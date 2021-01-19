@@ -1,3 +1,1 @@
-import { MiewButton } from './MiewButton';
-
-export default MiewButton;
+export * from './MiewButton';

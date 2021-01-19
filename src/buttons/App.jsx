@@ -3,67 +3,66 @@ import React from 'react';
 import { Layout } from './Layout';
 import { ButtonPanel } from './ButtonPanel';
 import {
-  bottomButtons as bottomConfig,
-  leftButtons as leftConfig,
-  rightButtons as rightConfig,
-  topButtons as topConfig,
+  bottomButtons as _bottom,
+  leftButtons as _left,
+  rightButtons as _right,
+  topButtons as _top,
 } from './buttons';
-import { useButtons } from './useButtons';
+import { useButtonGroups } from './useButtonGroups';
 
 const App = props => {
-  let {
+  const {
     top,
     left,
     right,
     bottom,
-    hide = {},
   } = props;
 
-  const topButtons = useButtons(
-    topConfig,
-    'top',
-    hide,
-    top
+  const topButtons = useButtonGroups(
+    _top,
+    top,
+    process.env.HIDE_TOP
   );
-  const leftButtons = useButtons(
-    leftConfig,
-    'left',
-    hide,
-    left
+  const leftButtons = useButtonGroups(
+    _left,
+    left,
+    process.env.HIDE_LEFT
   );
-  const rightButtons = useButtons(
-    rightConfig,
-    'right',
-    hide,
-    right
+  const rightButtons = useButtonGroups(
+    _right,
+    right,
+    process.env.HIDE_RIGHT
   );
-  const bottomButtons = useButtons(
-    bottomConfig,
-    'bottom',
-    hide,
-    bottom
+  const bottomButtons = useButtonGroups(
+    _bottom,
+    bottom,
+    process.env.HIDE_BOTTOM
   );
 
   return (
     <Layout>
       <ButtonPanel
         area="top"
-        buttons={topButtons}
+        groups={topButtons}
+        // buttons={topButtons}
       />
 
       <ButtonPanel
         area="left"
-        buttons={leftButtons}
+        groups={leftButtons}
+        // buttons={leftButtons}
       />
 
       <ButtonPanel
         area="right"
-        buttons={rightButtons}
+        groups={rightButtons}
+        // buttons={rightButtons}
       />
 
       <ButtonPanel
         area="bottom"
-        buttons={bottomButtons}
+        groups={bottomButtons}
+        // buttons={bottomButtons}
       />
 
     </Layout>

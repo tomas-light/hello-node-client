@@ -7,17 +7,17 @@ const prodWebpackConfig = merge(
   {
     mode: 'production',
     optimization: {
-      moduleIds: 'hashed',
-      runtimeChunk: 'single',
-      splitChunks: {
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
-          },
-        },
-      },
+      // moduleIds: 'hashed',
+      // runtimeChunk: 'single',
+      // splitChunks: {
+      //   cacheGroups: {
+      //     vendor: {
+      //       test: /[\\/]node_modules[\\/]/,
+      //       name: 'vendors',
+      //       chunks: 'all',
+      //     },
+      //   },
+      // },
       minimizer: [
         new TerserPlugin(),
       ]

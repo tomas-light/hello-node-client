@@ -16,6 +16,7 @@
   "dependencies": {
     "@loadable/component": "^5.14.1",
     "axios": "^0.21.1",
+    "dotenv": "^8.2.0",
     "hoist-non-react-statics": "^3.3.2",
     "miew": "^0.9.0",
     "react": "16.13.1",
@@ -57,7 +58,7 @@
     "eslint-plugin-sonarjs": "^0.5.0",
     "fork-ts-checker-webpack-plugin": "5.0.6",
     "html-webpack-plugin": "^4.3.0",
-    "jest": "26.4.2",
+    "jest": "^26.6.3",
     "mini-css-extract-plugin": "^0.11.0",
     "npm-run-all": "^4.1.5",
     "style-loader": "^1.2.1",

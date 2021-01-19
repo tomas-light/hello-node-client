@@ -1,21 +1,22 @@
 import React from 'react';
 
-import { Button } from './Button';
+import { ButtonGroup } from './ButtonGroup';
 
-const ButtonPanel = ({ area, buttons }) => (
+const horizontalAreas = ['left', 'right'];
+
+const ButtonPanel = ({ area, groups }) => (
   <div
     style={{
-      display: 'grid',
-      gridArea: area,
       border: 'solid 1px black',
+      gridArea: area,
+      display: 'grid',
+      gridAutoFlow: horizontalAreas.includes(area) ? 'row' : 'column',
     }}
   >
-    {buttons ? buttons.map((button, index) =>
-      <Button
-        key={`button-${index}`}
-        component={button.component}
-        onClick={button.onClick}
-        menu={button.menu}
+    {groups ? groups.map((buttons, index) =>
+      <ButtonGroup
+        key={`group-${index}`}
+        buttons={buttons}
       />
     ) : null}
   </div>

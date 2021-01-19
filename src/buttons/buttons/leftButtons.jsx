@@ -1,22 +1,18 @@
 import React from 'react';
 
 export const leftButtons = [
-  {
-    component: <div>left 1</div>,
-    onClick: event => console.log(event, 'left 1'),
+  [{
+    Component: () => <div>left 1</div>,
     menu: [
       {
-        component: <div>inner left 1</div>,
-        onClick: event => console.log(event, 'inner left 1'),
+        Component: () => <div>inner left 1</div>,
       },
       {
-        component: <div>inner left 2</div>,
-        onClick: event => console.log(event, 'inner left 2'),
+        Component: () => <div>inner left 2</div>,
       },
     ],
   },
   {
-    component: <div>left 2</div>,
-    onClick: event => console.log(event, 'left 2'),
-  },
+    Component: () => <div>left 2</div>,
+  }],
 ];
