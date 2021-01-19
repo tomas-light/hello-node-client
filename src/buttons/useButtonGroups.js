@@ -1,25 +1,53 @@
 import { useEffect, useState } from 'react';
 
 function useButtonGroups(
-  originalButtonsGroups,
-  additionalButtonsGroups,
+  originalGroups,
+  additionalGroups,
   hide
 ) {
   const [buttonGroups, setButtonGroups] = useState([]);
 
   useEffect(() => {
-    let groups = originalButtonsGroups.concat(additionalButtonsGroups || []);
+    let groups = joinGroups(originalGroups, additionalGroups);
     if (Array.isArray(hide)) {
       groups = filterButtonGroups(groups, hide);
     }
     setButtonGroups(groups);
   }, [
-    originalButtonsGroups,
-    additionalButtonsGroups,
+    originalGroups,
+    additionalGroups,
     // hide,
   ]);
 
   return buttonGroups;
+}
+
+function joinGroups(originalGroups, additionalGroups) {
+  if (!additionalGroups) {
+    return originalGroups;
+  }
+
+  let maxLength = originalGroups.length;
+  if (additionalGroups.length > maxLength) {
+    maxLength = additionalGroups.length;
+  }
+
+  const joinedGroups = [];
+  for (let i = 0; i < maxLength; i++) {
+    const leftGroup = getGroupByIndex(originalGroups, i);
+    const rightGroup = getGroupByIndex(additionalGroups, i);
+
+    joinedGroups.push(leftGroup.concat(rightGroup));
+  }
+
+  return joinedGroups;
+}
+
+function getGroupByIndex(groups, index) {
+  if (index >= groups.length) {
+    return [];
+  }
+  return groups[index];
 }
 
 function filterButtonGroups(groups, indexes) {
