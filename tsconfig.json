@@ -1,30 +1,38 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "checkJs": true,
     "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "importHelpers": true,
-    "jsx": "react",
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
-    "noErrorTruncation": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "target": "es6",
-    "watch": false,
-    "noImplicitAny": false,
+    "strict": true,
+    "target": "ESNext",
 
-    "baseUrl": "src",
-    "paths": {
-    }
+    "baseUrl": "src"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/**/*.test.ts?(x)"
-  ]
+  "ts-node": {
+    "compilerOptions": {
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "skipLibCheck": true,
+      "strict": false,
+      "target": "esnext"
+    }
+  }
 }
