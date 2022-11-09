@@ -1,0 +1,30 @@
+.root {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  width: 200px;
+}
+
+.cancel, .back {
+  padding: 4px;
+}
+
+.cancel {
+  border: 1px solid black;
+}
+
+.back {
+  border: none;
+  display: flex;
+  column-gap: 4px;
+}
+
+.apply {
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 4px 8px;
+  background-color: dodgerblue;
+  color: white;
+  font-weight: 400;
+}
