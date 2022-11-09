@@ -4,7 +4,7 @@
 ### Запуск
 В консоли набрать `yarn start`
 
-### TSL and localhost
+#### TSL and localhost (Optional)
 HTTPS connection for localhost can be enabled in `./webpack/config.dev.ts`.
 1. Uncomment lines bellow
 ```ts
