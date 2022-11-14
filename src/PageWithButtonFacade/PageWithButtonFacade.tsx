@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import classes from './PageWithButtonFacade.module.scss';
 
-const PageWithButtonFacade = () => {
+const PageWithButtonFacade1 = () => {
   const navigate = useNavigate();
 
   return (
@@ -60,17 +60,58 @@ const PageWithButtonFacade = () => {
   // );
 };
 
-// todo:
-type ButtonProps = {
-  variant: 'back' | 'cancel' | 'apply';
+const PageWithButtonFacade = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className={classes.root}>
+      <Button
+        variant={'back'}
+        onClick={() => {
+          navigate('/');
+        }}
+        icon={{ color: 'secondary' }}
+      />
+
+      <Button
+        variant={'cancel'}
+        onClick={() => {
+          console.log('cancel');
+        }}
+      />
+
+      <Button
+        variant={'apply'}
+        onClick={() => {
+          console.log('apply');
+        }}
+        applyText={'условия соглашения'}
+      />
+    </div>
+  );
 };
 
-const Button = (props: ButtonProps) => {
-  const {} = props;
+type ButtonProps = {
+  variant: 'back' | 'cancel' | 'apply';
+  onClick: () => void;
+  icon?: SvgIconProps;
+  applyText?: string;
+};
 
-  // todo:
+const Button = <T extends ButtonProps>(props: T) => {
+  const { variant, onClick, icon, applyText } = props;
 
-  return <div></div>;
+  switch (variant) {
+    case 'back':
+      return <BackButton onClick={onClick} icon={icon ?? { color: 'secondary' }} />;
+    case 'cancel':
+      return <CancelButton onClick={onClick} />;
+    case 'apply':
+      return <ApplyButton onClick={onClick} applyText={applyText ?? 'applyText'} />;
+
+    default:
+      return null;
+  }
 };
 
 type BackButtonProps = {
