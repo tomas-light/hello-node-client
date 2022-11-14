@@ -3,6 +3,7 @@ import { SvgIconProps } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import classes from './PageWithButtonFacade.module.scss';
+import { VFC } from "react";
 
 type BackButtonProps = {
   onClick: () => void;
@@ -49,42 +50,35 @@ const ApplyButton = (props: ApplyButtonProps) => {
   );
 };
 
-enum ButtonVariants {
-  back = 'back',
-  cancel = 'cancel',
-  apply = 'apply'
-}
-
 type ButtonVariant = 'back' | 'cancel' | 'apply';
 type ButtonVariantProp<T extends ButtonVariant> = { variant: T };
 type ButtonModel<T extends ButtonVariant, V> = ButtonVariantProp<T> & V;
-
-const back = 'back';
 
 type ButtonProps =
   | ButtonModel<'back', BackButtonProps>
   | ButtonModel<'cancel', CancelButtonProps>
   | ButtonModel<'apply', ApplyButtonProps>;
 
+const variants = {
+  back: BackButton,
+  cancel: CancelButton,
+  apply: ApplyButton
+}
+
 const Button = (props: ButtonProps) => {
-  const { variant } = props;
+  const { variant, ...componentProps } = props;
 
-  if (variant === ButtonVariants.back) {
-    const { onClick, icon } = props;
-    return <BackButton onClick={onClick} icon={icon} />;
+  if (!variant) {
+    return null;
   }
 
-  if (variant === ButtonVariants.cancel) {
-    const { onClick } = props;
-    return <CancelButton onClick={onClick} />;
+  const Component = variants[variant] as VFC<typeof componentProps> | undefined;
+
+  if (!Component) {
+    throw new Error(`variant (${variant}) is not supported`);
   }
 
-  if (variant === ButtonVariants.apply) {
-    const { onClick, applyText } = props;
-    return <ApplyButton onClick={onClick} applyText={applyText} />;
-  }
-
-  return <div>Button {variant} is not supported</div>;
+  return <Component {...componentProps} />;
 };
 
 const PageWithButtonFacade = () => {
