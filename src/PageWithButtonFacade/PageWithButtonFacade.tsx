@@ -49,17 +49,42 @@ const ApplyButton = (props: ApplyButtonProps) => {
   );
 };
 
-// todo:
-type ButtonProps = {
-  variant: 'back' | 'cancel' | 'apply';
-};
+enum ButtonVariants {
+  back = 'back',
+  cancel = 'cancel',
+  apply = 'apply'
+}
+
+type ButtonVariant = 'back' | 'cancel' | 'apply';
+type ButtonVariantProp<T extends ButtonVariant> = { variant: T };
+type ButtonModel<T extends ButtonVariant, V> = ButtonVariantProp<T> & V;
+
+const back = 'back';
+
+type ButtonProps =
+  | ButtonModel<'back', BackButtonProps>
+  | ButtonModel<'cancel', CancelButtonProps>
+  | ButtonModel<'apply', ApplyButtonProps>;
 
 const Button = (props: ButtonProps) => {
-  const {} = props;
+  const { variant } = props;
 
-  // todo:
+  if (variant === ButtonVariants.back) {
+    const { onClick, icon } = props;
+    return <BackButton onClick={onClick} icon={icon} />;
+  }
 
-  return <div></div>;
+  if (variant === ButtonVariants.cancel) {
+    const { onClick } = props;
+    return <CancelButton onClick={onClick} />;
+  }
+
+  if (variant === ButtonVariants.apply) {
+    const { onClick, applyText } = props;
+    return <ApplyButton onClick={onClick} applyText={applyText} />;
+  }
+
+  return <div>Button {variant} is not supported</div>;
 };
 
 const PageWithButtonFacade = () => {
@@ -67,20 +92,23 @@ const PageWithButtonFacade = () => {
 
   return (
     <div className={classes.root}>
-      <BackButton
+      <Button
+        variant={'back'}
         onClick={() => {
           navigate('/');
         }}
         icon={{ color: 'secondary' }}
       />
 
-      <CancelButton
+      <Button
+        variant={'cancel'}
         onClick={() => {
           console.log('cancel');
         }}
       />
 
-      <ApplyButton
+      <Button
+        variant={'apply'}
         onClick={() => {
           console.log('apply');
         }}
@@ -88,34 +116,6 @@ const PageWithButtonFacade = () => {
       />
     </div>
   );
-
-  // todo: replace with
-  // return (
-  //   <div className={classes.root}>
-  //     <Button
-  //       variant={'back'}
-  //       onClick={() => {
-  //         navigate('/');
-  //       }}
-  //       icon={{ color: 'secondary' }}
-  //     />
-  //
-  //     <Button
-  //       variant={'cancel'}
-  //       onClick={() => {
-  //         console.log('cancel');
-  //       }}
-  //     />
-  //
-  //     <Button
-  //       variant={'apply'}
-  //       onClick={() => {
-  //         console.log('apply');
-  //       }}
-  //       applyText={'the terms of agreement'}
-  //     />
-  //   </div>
-  // );
 };
 
 export { PageWithButtonFacade };
