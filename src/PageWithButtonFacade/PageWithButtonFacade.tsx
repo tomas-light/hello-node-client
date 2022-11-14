@@ -3,7 +3,7 @@ import { SvgIconProps } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import classes from './PageWithButtonFacade.module.scss';
-import { VFC } from "react";
+import { ComponentProps, VFC } from "react";
 
 type BackButtonProps = {
   onClick: () => void;
@@ -50,22 +50,16 @@ const ApplyButton = (props: ApplyButtonProps) => {
   );
 };
 
-type ButtonVariant = 'back' | 'cancel' | 'apply';
-type ButtonVariantProp<T extends ButtonVariant> = { variant: T };
-type ButtonModel<T extends ButtonVariant, V> = ButtonVariantProp<T> & V;
-
-type ButtonProps =
-  | ButtonModel<'back', BackButtonProps>
-  | ButtonModel<'cancel', CancelButtonProps>
-  | ButtonModel<'apply', ApplyButtonProps>;
-
 const variants = {
   back: BackButton,
   cancel: CancelButton,
   apply: ApplyButton
 }
 
-const Button = (props: ButtonProps) => {
+type ButtonVariant = keyof typeof variants;
+type ButtonProps<T extends ButtonVariant> = { variant: T } & ComponentProps<typeof variants[T]>;
+
+const Button = <T extends ButtonVariant>(props: ButtonProps<T>) => {
   const { variant, ...componentProps } = props;
 
   if (!variant) {
