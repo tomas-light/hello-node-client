@@ -1,64 +1,9 @@
 import { ChevronLeft } from '@mui/icons-material';
 import { SvgIconProps } from '@mui/material';
+import React, { ComponentProps, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import classes from './PageWithButtonFacade.module.scss';
-
-const PageWithButtonFacade1 = () => {
-  const navigate = useNavigate();
-
-  return (
-    <div className={classes.root}>
-      <BackButton
-        onClick={() => {
-          navigate('/');
-        }}
-        icon={{ color: 'secondary' }}
-      />
-
-      <CancelButton
-        onClick={() => {
-          console.log('cancel');
-        }}
-      />
-
-      <ApplyButton
-        onClick={() => {
-          console.log('apply');
-        }}
-        applyText={'условия соглашения'}
-      />
-    </div>
-  );
-
-  // todo: replace with
-  // return (
-  //   <div className={classes.root}>
-  //     <Button
-  //       variant={'back'}
-  //       onClick={() => {
-  //         navigate('/');
-  //       }}
-  //       icon={{ color: 'secondary' }}
-  //     />
-  //
-  //     <Button
-  //       variant={'cancel'}
-  //       onClick={() => {
-  //         console.log('cancel');
-  //       }}
-  //     />
-  //
-  //     <Button
-  //       variant={'apply'}
-  //       onClick={() => {
-  //         console.log('apply');
-  //       }}
-  //       applyText={'условия соглашения'}
-  //     />
-  //   </div>
-  // );
-};
 
 const PageWithButtonFacade = () => {
   const navigate = useNavigate();
@@ -91,28 +36,28 @@ const PageWithButtonFacade = () => {
   );
 };
 
-type ButtonProps = {
-  variant: 'back' | 'cancel' | 'apply';
-  onClick: () => void;
-  icon?: SvgIconProps;
-  applyText?: string;
-};
+// type ButtonProps = {
+//   variant: 'back' | 'cancel' | 'apply';
+//   onClick: () => void;
+//   icon?: SvgIconProps;
+//   applyText?: string;
+// };
 
-const Button = <T extends ButtonProps>(props: T) => {
-  const { variant, onClick, icon, applyText } = props;
+// const Button = <T extends ButtonProps>(props: T) => {
+//   const { variant, onClick, icon, applyText } = props;
 
-  switch (variant) {
-    case 'back':
-      return <BackButton onClick={onClick} icon={icon ?? { color: 'secondary' }} />;
-    case 'cancel':
-      return <CancelButton onClick={onClick} />;
-    case 'apply':
-      return <ApplyButton onClick={onClick} applyText={applyText ?? 'applyText'} />;
+//   switch (variant) {
+//     case 'back':
+//       return <BackButton onClick={onClick} icon={icon ?? { color: 'secondary' }} />;
+//     case 'cancel':
+//       return <CancelButton onClick={onClick} />;
+//     case 'apply':
+//       return <ApplyButton onClick={onClick} applyText={applyText ?? 'applyText'} />;
 
-    default:
-      return null;
-  }
-};
+//     default:
+//       return null;
+//   }
+// };
 
 type BackButtonProps = {
   onClick: () => void;
@@ -157,6 +102,27 @@ const ApplyButton = (props: ApplyButtonProps) => {
       Принять {applyText}
     </button>
   );
+};
+
+type ButtonProps = {
+  variant: 'back' | 'cancel' | 'apply';
+};
+type ButtonVariants = ButtonProps['variant'];
+
+const components = {
+  back: BackButton,
+  cancel: CancelButton,
+  apply: ApplyButton,
+};
+
+type A<T extends ButtonVariants> = typeof components[T];
+type B<T extends ButtonVariants> = ComponentProps<A<T>> & { variant: T };
+
+const Button = <T extends ButtonVariants>(props: B<T>) => {
+  const { variant, ...rest } = props;
+
+  const Component = components[variant] as FC<typeof rest>;
+  return <Component {...rest} />;
 };
 
 export { PageWithButtonFacade };
