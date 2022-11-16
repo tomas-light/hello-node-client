@@ -36,29 +36,6 @@ const PageWithButtonFacade = () => {
   );
 };
 
-// type ButtonProps = {
-//   variant: 'back' | 'cancel' | 'apply';
-//   onClick: () => void;
-//   icon?: SvgIconProps;
-//   applyText?: string;
-// };
-
-// const Button = <T extends ButtonProps>(props: T) => {
-//   const { variant, onClick, icon, applyText } = props;
-
-//   switch (variant) {
-//     case 'back':
-//       return <BackButton onClick={onClick} icon={icon ?? { color: 'secondary' }} />;
-//     case 'cancel':
-//       return <CancelButton onClick={onClick} />;
-//     case 'apply':
-//       return <ApplyButton onClick={onClick} applyText={applyText ?? 'applyText'} />;
-
-//     default:
-//       return null;
-//   }
-// };
-
 type BackButtonProps = {
   onClick: () => void;
   icon: SvgIconProps;
