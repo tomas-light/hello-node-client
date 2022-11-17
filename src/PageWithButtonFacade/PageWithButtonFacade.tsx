@@ -32,6 +32,14 @@ const PageWithButtonFacade = () => {
         }}
         applyText={'условия соглашения'}
       />
+
+      <Button
+        variant={'apply1'}
+        onClick={() => {
+          console.log('apply1');
+        }}
+        applyText={'условия соглашения 1'}
+      />
     </div>
   );
 };
@@ -81,24 +89,33 @@ const ApplyButton = (props: ApplyButtonProps) => {
   );
 };
 
-type ButtonProps = {
-  variant: 'back' | 'cancel' | 'apply';
-};
-type ButtonVariants = ButtonProps['variant'];
+// type ButtonProps = {
+//   variant: 'back' | 'cancel' | 'apply';
+// };
+// type ButtonVariants = ButtonProps['variant'];
 
 const components = {
   back: BackButton,
   cancel: CancelButton,
   apply: ApplyButton,
+  apply1: ApplyButton,
 };
+type ButtonKeys = keyof typeof components;
 
-type A<T extends ButtonVariants> = typeof components[T];
-type B<T extends ButtonVariants> = ComponentProps<A<T>> & { variant: T };
+type A<T extends ButtonKeys> = typeof components[T];
+type B<T extends ButtonKeys> = ComponentProps<A<T>> & { variant: T };
 
-const Button = <T extends ButtonVariants>(props: B<T>) => {
+const Button = <T extends ButtonKeys>(props: B<T>) => {
   const { variant, ...rest } = props;
 
+  if (!variant) {
+    throw new Error(`Invalid variant ${variant}`);
+  }
+
   const Component = components[variant] as FC<typeof rest>;
+  if (!Component) {
+    throw new Error('Some error occurred');
+  }
   return <Component {...rest} />;
 };
 
